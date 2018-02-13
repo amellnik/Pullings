@@ -14,7 +14,7 @@ app.use(function(req, res, next) {
 });
 
 
-app.get('/', (req, res) => res.send('Hello World!'));
+app.get('/', (req, res) => res.json({error: false, message: 'Nothing to see here'}));
 
 // POST method route
 app.post('/', function (req, res) {
