@@ -29,7 +29,8 @@ app.post('/', function (req, res) {
   console.log(req.body);
   pool.getConnection(function(err, connection) {
     if (err) {
-      res.json({error: true, message: error})
+      console.log(err);
+      res.json({error: true, message: err})
     }
     console.log(connection)
     // Use the connection
