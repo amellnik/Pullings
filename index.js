@@ -13,6 +13,7 @@ var pool = mysql.createPool({
 });
 
 var app = express();
+
 app.use(bodyParser());
 
 app.use(function(req, res, next) {
@@ -42,6 +43,7 @@ app.post('/', function (req, res) {
       if (error) {
         res.json({error: true, message: error});
       };
+      // Things worked
       res.json({error: false});
     });
   });
