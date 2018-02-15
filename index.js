@@ -28,6 +28,10 @@ app.get('/', (req, res) => res.json({error: false, message: 'Nothing to see here
 app.post('/', function (req, res) {
   console.log(req.body);
   pool.getConnection(function(err, connection) {
+    if (err) {
+      res.json({error: true, message: error})
+    }
+    console.log(connection)
     // Use the connection
     connection.query('INSERT INTO demo VALUES (NULL, ?, ?, ?)', [req.body.lat, req.body.long, req.body.text], function (error, results, fields) {
       // And done with the connection.
