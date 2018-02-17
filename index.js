@@ -14,7 +14,7 @@ var pool = mysql.createPool({
 
 var app = express();
 
-app.use(bodyParser());
+app.use(bodyParser.json());
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", req.get('origin'));
@@ -23,7 +23,27 @@ app.use(function(req, res, next) {
 });
 
 
-app.get('/', (req, res) => res.json({error: false, message: 'Nothing to see here'}));
+// POST method route
+app.get('/', function (req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) {
+      console.log(err);
+      res.json({error: true, message: err})
+    }
+    // Use the connection
+    connection.query('SELECT * FROM demo', function (error, results, fields) {
+      // And done with the connection.
+      connection.release();
+
+      if (error) {
+        res.json({error: true, message: error});
+      };
+      // Things worked
+      res.json({error: false, data: results});
+    });
+  });
+
+});
 
 // POST method route
 app.post('/', function (req, res) {
@@ -33,12 +53,10 @@ app.post('/', function (req, res) {
       console.log(err);
       res.json({error: true, message: err})
     }
-    console.log(connection)
     // Use the connection
     connection.query('INSERT INTO demo VALUES (NULL, ?, ?, ?)', [req.body.lat, req.body.long, req.body.text], function (error, results, fields) {
       // And done with the connection.
       connection.release();
-
 
       if (error) {
         res.json({error: true, message: error});
